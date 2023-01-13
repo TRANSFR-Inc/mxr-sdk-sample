@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Android;
 
 /*
  * A panel class that updates UI when the wifi connection status
@@ -53,18 +54,38 @@ namespace MXR.SDK.Samples {
         }
 
         void Awake() {
-            MXRManager.Init();
+            Debug.Log("!!! WifiPanel: Awake");
+
+            if (Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+            {
+                // The user authorized use
+                Debug.Log("!!! WifiPanel: has authorized");
+            }
+            else
+            {
+                Debug.Log("!!! WifiPanel: request user permission");
+
+                var callbacks = new PermissionCallbacks();
+                callbacks.PermissionDenied += PermissionCallbacks_PermissionDenied;
+                callbacks.PermissionGranted += PermissionCallbacks_PermissionGranted;
+                callbacks.PermissionDeniedAndDontAskAgain += PermissionCallbacks_PermissionDeniedAndDontAskAgain;
+                Permission.RequestUserPermission(Permission.ExternalStorageRead, callbacks);
+            }
         }
 
         void Start() {
+            Debug.Log("!!! WifiPanel: Start");
+
             wifiSsidTemplate.gameObject.SetActive(false);
             MXRManager.Init();
 
             OnWifiConnectionStatusChange(MXRManager.System.WifiConnectionStatus);
             OnWifiNetworksChange(MXRManager.System.WifiNetworks);
+            OnDeviceStatusChange(MXRManager.System.DeviceStatus);
             
             MXRManager.System.OnWifiConnectionStatusChange += OnWifiConnectionStatusChange;
             MXRManager.System.OnWifiNetworksChange += OnWifiNetworksChange;
+            MXRManager.System.OnDeviceStatusChange += OnDeviceStatusChange;
         }
 
         List<Text> wifiSsidInstances = new List<Text>();
@@ -84,7 +105,7 @@ namespace MXR.SDK.Samples {
 
         private void OnWifiConnectionStatusChange(WifiConnectionStatus obj) {
             UpdateText(wifiIsEnabled, obj.wifiIsEnabled);
-            UpdateText(ssid, obj.ssid);
+//            UpdateText(ssid, obj.ssid);
             UpdateText(state, obj.state);
             UpdateText(hasInternetAccess, obj.hasInternetAccess);
             UpdateText(requiresCaptivePortal, obj.requiresCaptivePortal);
@@ -101,6 +122,29 @@ namespace MXR.SDK.Samples {
             UpdateText(capabilities, obj.capabilities);
             UpdateText(networkSecurityType, obj.networkSecurityType);
             UpdateText(captivePortalUrl, obj.captivePortalUrl);
+        }
+
+        private void OnDeviceStatusChange(DeviceStatus obj) {
+            Debug.Log("!!! WifiPanel: OnDeviceStatusChange");
+
+            UpdateText(ssid, obj.serial);
+        }
+        
+        internal void PermissionCallbacks_PermissionDeniedAndDontAskAgain(string permissionName)
+        {
+            Debug.Log($"!!! WifiPanel: {permissionName} PermissionDeniedAndDontAskAgain");
+        }
+
+        internal void PermissionCallbacks_PermissionGranted(string permissionName)
+        {
+            Debug.Log($"!!! WifiPanel: {permissionName} PermissionCallbacks_PermissionGranted");
+            
+            MXRManager.Init();
+        }
+
+        internal void PermissionCallbacks_PermissionDenied(string permissionName)
+        {
+            Debug.Log($"!!! WifiPanel: {permissionName} PermissionCallbacks_PermissionDenied");
         }
     }
 }
