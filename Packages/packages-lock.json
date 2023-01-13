@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.mxr.unity.sdk": {
+      "version": "https://github.com/managexr/mxr-unity-sdk.git#upm@latest",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
+      },
+      "hash": "2a70f98b1e2408a3743911b2a7e334159a0db13c"
+    },
     "com.unity.collab-proxy": {
       "version": "1.13.5",
       "depth": 0,
@@ -43,7 +52,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0",
+      "version": "3.0.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {},

@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Samples/ManageXR Unity SDK/0.0.9/Samples/Scenes/Wifi Sample.unity
+    guid: 70e931ffcf83df84c83f0c027cae40ed
   m_configObjects: {}
