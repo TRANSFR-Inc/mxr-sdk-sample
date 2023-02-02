@@ -104,6 +104,9 @@ namespace MXR.SDK.Samples {
         }
 
         private void OnWifiConnectionStatusChange(WifiConnectionStatus obj) {
+            Debug.Log("!!! WifiPanel: OnWifiConnectionStatusChange - START: " + obj);
+            return;
+
             UpdateText(wifiIsEnabled, obj.wifiIsEnabled);
 //            UpdateText(ssid, obj.ssid);
             UpdateText(state, obj.state);
@@ -122,6 +125,8 @@ namespace MXR.SDK.Samples {
             UpdateText(capabilities, obj.capabilities);
             UpdateText(networkSecurityType, obj.networkSecurityType);
             UpdateText(captivePortalUrl, obj.captivePortalUrl);
+
+            Debug.Log("!!! WifiPanel: OnWifiConnectionStatusChange - END");
         }
 
         private void OnDeviceStatusChange(DeviceStatus obj) {
